@@ -13,8 +13,6 @@ init(){
 unload(){
 	setDvar("bg_fallDamageMaxHeight", getDvar("old_bg_fallDamageMaxHeight") );
 	setDvar("bg_fallDamageMinHeight", getDvar("old_bg_fallDamageMinHeight") );
-
-	level.hasRunModInit = false;
 }
 
 onPlayerSpawned(){

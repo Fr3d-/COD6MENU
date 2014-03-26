@@ -31,12 +31,6 @@ init(){
 }
 
 unload(){
-	level.weaponRestrictionsEnabled = true;
-
-	self.rolls = undefined;
-	self.roll = undefined;
-
-	level.hasRunModInit = false;
 }
 
 onPlayerSpawned(){

@@ -21,15 +21,7 @@ unload(){
 		ply setClientDvar( "lowAmmoWarningNoAmmoColor1", "0.8 0.25098 0.301961 0.8" );			
 		ply setClientDvar( "lowAmmoWarningNoReloadColor2", "0.701961 0.701961 0.301961 1" );	
 		ply setClientDvar( "lowAmmoWarningNoReloadColor1", "0.701961 0.701961 0.301961 0.701961" );	
-		ply.lives = "undefined"; 
-
-		ply thread changeClass();
-
 	}
-
-	level.weaponRestrictionsEnabled = true;
-
-	level.hasRunModInit = false;
 }
 
 changeClass(){

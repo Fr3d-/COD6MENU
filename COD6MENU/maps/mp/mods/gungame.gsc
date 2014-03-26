@@ -41,16 +41,6 @@ init(){
 }
 
 unload(){
-	level.weaponRestrictionsEnabled = true;
-
-	for( i = 0 ; i < level.players.size ; i++ ){
-		ply = level.players[i];
-
-		ply.gungameLevel = "undefined";
-	}
-
-	level.gungameLevels = "undefined";
-	level.hasRunModInit = false;
 }
 
 destroyOn( hudElem, notification ){

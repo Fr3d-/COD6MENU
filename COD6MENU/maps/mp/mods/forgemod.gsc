@@ -3,7 +3,6 @@
 #include maps\mp\gametypes\_hud_util;
 
 init(){
-
 	removeAllObjects();
 
 	setDvarIfUninitialized("old_bg_fallDamageMaxHeight", getDvar("bg_fallDamageMaxHeight") );
@@ -20,8 +19,6 @@ unload(){
 	setDvar("bg_fallDamageMinHeight", getDvar("old_bg_fallDamageMinHeight") );
 
 	self setClientDvar("cg_drawFPS", 0 );
-
-	level.hasRunModInit = false;
 }
 
 onPlayerSpawned(){

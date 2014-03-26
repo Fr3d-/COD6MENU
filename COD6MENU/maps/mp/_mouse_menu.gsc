@@ -881,9 +881,9 @@ player_option(player)
 }
 
 testing_player( ply ){
-	if( !defined( ply.testingvar ) ){
+	if( !defined( level.testingvar ) ){
 		iPrintLn("Not defined, defining");
-		ply.testingvar = 1;
+		level.testingvar = 1;
 	} else {
 		iPrintLn("Already defined");
 	}
@@ -1210,7 +1210,7 @@ changeMod( newMod ){
 
 	setDvar("mod", newMod );
 
-	slayAll();
+	resetGame();
 
 	message_to_all("changed mod to " + newMod, self );
 }
