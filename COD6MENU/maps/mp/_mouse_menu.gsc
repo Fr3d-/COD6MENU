@@ -285,7 +285,7 @@ doGamemodesOff( oldMod ){
 			if( self isHost() )
 				self maps\mp\mods\oneinthechamber::unload();
 			break;
-			
+
 		default:
 			iPrintLn("oldMod is not none nor quickscope?");
 			break;
@@ -815,9 +815,14 @@ main_menu()
 	elem add_button( "Change Mapmod", ::mapmod_list, "CENTERxMIDDLEx0x0x75x25", undefined, "claymore_activated" );
 	elem add_button( "Change Mod", ::mod_list, "CENTERxMIDDLEx0x0x75x25", undefined, "claymore_activated" );
 	elem add_button( "Add bots", ::bot_list, "CENTERxMIDDLEx0x0x75x25", undefined, "claymore_activated" );
+	elem add_button( "Reset gamestate", ::resetGame, "CENTERxMIDDLEx0x0x75x25",  undefined, "claymore_activated" );
 	elem add_button( "Force to lobby", ::forceLobby, "CENTERxMIDDLEx0x0x75x25",  undefined, "claymore_activated" );
 
 	self create_it();
+}
+
+resetGame(){
+	map_restart( true );
 }
 
 forceLobby(){
