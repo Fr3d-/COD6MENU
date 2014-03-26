@@ -1,12 +1,3 @@
-/*
-	CHANGELOG
-	28/03/2013 - Removed all logprints so it'll be easier to indentify bans in games_mp.log
-	14/05/2013 - Checking when people die for gungame
-
-
-
-*/
-
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
 #include common_scripts\utility;
@@ -388,8 +379,6 @@ Callback_PlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vD
 		thread maps\mp\mods\rollthedice::onPlayerKilled( eInflictor, attacker, self, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, false );
 	else if( getDvar("mod") == "oneinthechamber")
 		thread maps\mp\mods\oneinthechamber::onPlayerKilled( eInflictor, attacker, self, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, false );
-	else if( getDvar("mod") == "counterstrike")
-		thread maps\mp\mods\counterstrike::onPlayerKilled( eInflictor, attacker, self, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, false );
 
 	PlayerKilled_internal( eInflictor, attacker, self, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, false );
 }

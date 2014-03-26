@@ -244,10 +244,6 @@ doGamemodes(){
 			self thread maps\mp\mods\oneinthechamber::onPlayerSpawned();
 			break;
 
-		case "counterstrike":
-			self thread maps\mp\mods\counterstrike::onPlayerSpawned();
-			break;
-
 		default:
 			iPrintLn("MOD not defined..");
 			setDvar( "mod", "none" );
@@ -289,12 +285,7 @@ doGamemodesOff( oldMod ){
 			if( self isHost() )
 				self maps\mp\mods\oneinthechamber::unload();
 			break;
-
-		case "counterstrike":
-			if( self isHost() )
-				self maps\mp\mods\counterstrike::unload();
-			break;
-
+			
 		default:
 			iPrintLn("oldMod is not none nor quickscope?");
 			break;
@@ -1199,7 +1190,6 @@ mod_list( num ){
 	elem add_button( "Gungame", ::changeMod, "CENTERxMIDDLEx0x0x135x25", "gungame", "bullet_impact_headshot_2", false );
 	elem add_button( "RollTheDice", ::changeMod, "CENTERxMIDDLEx0x0x135x25", "rollthedice", "bullet_impact_headshot_2", false );
 	elem add_button( "oneinthechamber", ::changeMod, "CENTERxMIDDLEx0x0x135x25", "oneinthechamber", "bullet_impact_headshot_2", false );
-	elem add_button( "CounterStrike", ::changeMod, "CENTERxMIDDLEx0x0x135x25", "counterstrike", "bullet_impact_headshot_2", false );
 
 	self create_it( true );
 }
