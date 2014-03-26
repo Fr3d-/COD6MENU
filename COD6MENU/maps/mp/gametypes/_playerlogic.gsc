@@ -1,3 +1,11 @@
+/*
+	CHANGELOG
+	28/03/2013 - Removed all logprints so it'll be easier to indentify bans in games_mp.log
+
+
+
+*/
+
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
 #include common_scripts\utility;
@@ -969,7 +977,7 @@ Callback_PlayerDisconnect()
 	
 	lpselfnum = self getEntityNumber();
 	lpGuid = self.guid;
-	logPrint("Q;" + lpGuid + ";" + lpselfnum + ";" + self.name + "\n");
+	//logPrint("Q;" + lpGuid + ";" + lpselfnum + ";" + self.name + "\n");
 
 	self thread maps\mp\_events::disconnected();
 
@@ -1122,7 +1130,7 @@ Callback_PlayerConnect()
 
 	self.clientid = self.pers["clientid"];
 
-	logPrint("J;" + self.guid + ";" + self getEntityNumber() + ";" + self.name + "\n");
+	//logPrint("J;" + self.guid + ";" + self getEntityNumber() + ";" + self.name + "\n");
 
 	if ( matchMakingGame() && game["clientid"] <= 24 && game["clientid"] != getMatchData( "playerCount" ) )
 	{

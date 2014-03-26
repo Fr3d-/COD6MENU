@@ -31,6 +31,18 @@ main()
 	registerNumLivesDvar( level.gameType, 0, 0, 10 );
 	registerHalfTimeDvar( level.gameType, 0, 0, 1 );
 	
+	
+	setDvar("scr_oneflag_scorelimit", 1 );
+	setDvar("scr_oneflag_timelimit", 3 );
+	setDvar("scr_oneflag_roundlimit", 0 );
+	setDvar("scr_oneflag_winlimit", 4 );
+	setDvar("scr_oneflag_roundswitch", 3 );
+	setDvar("scr_oneflag_numlives", 0 );
+	setDvar("scr_oneflag_playerrespawndelay", 0 );
+	setDvar("scr_oneflag_waverespawndelay", 0 );
+	setDvar("scr_oneflag_promode", 0 );
+	
+	
 	level.objectiveBased = true;
 	level.teamBased = true;
 	level.onPrecacheGameType = ::onPrecacheGameType;

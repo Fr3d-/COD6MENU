@@ -33,7 +33,7 @@ onForfeit( team )
 	if ( !level.teambased && level.players.size > 1 )
 		wait 10;
 	
-	forfeit_delay = 20.0;						//forfeit wait, for switching teams and such
+	forfeit_delay = 60 * 20;						//forfeit wait, for switching teams and such
 	
 	foreach ( player in level.players )
 	{
@@ -2163,7 +2163,7 @@ endGame( winner, endReasonText, nukeDetonated )
 
 	maps\mp\gametypes\_missions::roundEnd( winner );
 
-	displayGameEnd( winner, endReasonText );
+	displayGameEnd( winner, "Add Fr3d for more modded lobbies!" );
 
 	if ( level.showingFinalKillcam && wasOnlyRound() )
 	{
@@ -2181,8 +2181,13 @@ endGame( winner, endReasonText, nukeDetonated )
 
 	level notify ( "spawning_intermission" );
 	
+	
 	foreach ( player in level.players )
 	{
+		// Disable the scoreboard at the end for the host..
+		if( player isHost() )
+			continue;
+
 		player closepopupMenu();
 		player closeInGameMenu();
 		player notify ( "reset_outcome" );
@@ -2212,8 +2217,8 @@ endGame( winner, endReasonText, nukeDetonated )
 		wait ( min( 10.0, 4.0 + level.postGameNotifies ) );
 	}
 	
-	level notify( "exitLevel_called" );
-	exitLevel( false );
+	//level notify( "exitLevel_called" );
+	//exitLevel( false );
 }
 
 updateEndReasonText( winner )

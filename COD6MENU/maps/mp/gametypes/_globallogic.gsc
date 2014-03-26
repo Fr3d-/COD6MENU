@@ -21,7 +21,13 @@ init()
 	#/
 
 	level.script = toLower( getDvar( "mapname" ) );
-	level.gametype = toLower( getDvar( "g_gametype" ) );
+	
+	if( toLower( getDvar( "g_gametype" ) ) == "arena" ){
+		level.gametype = "oneflag";
+	} else {
+		level.gametype = toLower( getDvar( "g_gametype" ) );
+	}
+
 
 	level.otherTeam["allies"] = "axis";
 	level.otherTeam["axis"] = "allies";

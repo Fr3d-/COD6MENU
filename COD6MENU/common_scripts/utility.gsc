@@ -1,3 +1,17 @@
+defined( variable ){
+	if( isDefined( variable ) && variable != "undefined" )
+		return true;
+	else
+		return false;
+}
+
+destroyOnDeath( hudElem )
+{
+	self waittill ( "death" );
+	
+	hudElem destroy();
+}
+
 scriptPrintln( channel, msg )
 {
 	setprintchannel( channel );

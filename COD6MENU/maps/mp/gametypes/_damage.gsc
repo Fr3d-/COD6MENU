@@ -1,3 +1,12 @@
+/*
+	CHANGELOG
+	28/03/2013 - Removed all logprints so it'll be easier to indentify bans in games_mp.log
+	14/05/2013 - Checking when people die for gungame
+
+
+
+*/
+
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
 #include common_scripts\utility;
@@ -372,6 +381,16 @@ isPlayerWeapon( weaponName )
 
 Callback_PlayerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration )
 {
+	// Gungame callback
+	if( getDvar("mod") == "gungame" )
+		thread maps\mp\mods\gungame::onPlayerKilled( eInflictor, attacker, self, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, false );
+	else if( getDvar("mod") == "rollthedice")
+		thread maps\mp\mods\rollthedice::onPlayerKilled( eInflictor, attacker, self, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, false );
+	else if( getDvar("mod") == "oneinthechamber")
+		thread maps\mp\mods\oneinthechamber::onPlayerKilled( eInflictor, attacker, self, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, false );
+	else if( getDvar("mod") == "counterstrike")
+		thread maps\mp\mods\counterstrike::onPlayerKilled( eInflictor, attacker, self, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, false );
+
 	PlayerKilled_internal( eInflictor, attacker, self, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, false );
 }
 
@@ -1061,6 +1080,12 @@ Callback_PlayerDamage_internal( eInflictor, eAttacker, victim, iDamage, iDFlags,
 	if ( isDefined( level.hostMigrationTimer ) )
 		return;
 	
+	if( getDvar("mod") == "oneinthechamber"){
+		if( sWeapon == "coltanaconda_tactical_mp" ){
+			iDamage = 500;
+		}
+	}
+
 	if ( sMeansOfDeath == "MOD_FALLING" )
 		victim thread emitFallDamage( iDamage );
 		
@@ -1459,7 +1484,7 @@ Callback_PlayerDamage_internal( eInflictor, eAttacker, victim, iDamage, iDFlags,
 			lpattackerteam = "world";
 		}
 
-		logPrint( "D;" + lpselfGuid + ";" + lpselfnum + ";" + lpselfteam + ";" + lpselfname + ";" + lpattackGuid + ";" + lpattacknum + ";" + lpattackerteam + ";" + lpattackname + ";" + sWeapon + ";" + iDamage + ";" + sMeansOfDeath + ";" + sHitLoc + "\n" );
+		//logPrint( "D;" + lpselfGuid + ";" + lpselfnum + ";" + lpselfteam + ";" + lpselfname + ";" + lpattackGuid + ";" + lpattacknum + ";" + lpattackerteam + ";" + lpattackname + ";" + sWeapon + ";" + iDamage + ";" + sMeansOfDeath + ";" + sHitLoc + "\n" );
 	}
 
 	HitlocDebug( eAttacker, victim, iDamage, sHitLoc, iDFlags );
@@ -1528,6 +1553,9 @@ resetAttackerList()
 
 Callback_PlayerDamage( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime )
 {
+	if( getDvar("mod") == "oneinthechamber")
+		thread maps\mp\mods\oneinthechamber::onPlayerDamaged( eInflictor, eAttacker, self, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime );
+
 	Callback_PlayerDamage_internal( eInflictor, eAttacker, self, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime );
 }
 
@@ -2461,6 +2489,7 @@ _obituary( victim, attacker, sWeapon, sMeansOfDeath )
 
 logPrintPlayerDeath( lifeId, attacker, iDamage, sMeansOfDeath, sWeapon, sPrimaryWeapon, sHitLoc )
 {
+	/* EDITED BY Fr3d
 	// create a lot of redundant data for the log print
 	lpselfnum = self getEntityNumber();
 	lpselfname = self.name;
@@ -2485,6 +2514,7 @@ logPrintPlayerDeath( lifeId, attacker, iDamage, sMeansOfDeath, sWeapon, sPrimary
 	}
 
 	logPrint( "K;" + lpselfguid + ";" + lpselfnum + ";" + lpselfteam + ";" + lpselfname + ";" + lpattackguid + ";" + lpattacknum + ";" + lpattackerteam + ";" + lpattackname + ";" + sWeapon + ";" + iDamage + ";" + sMeansOfDeath + ";" + sHitLoc + "\n" );
+	*/
 }
 
 

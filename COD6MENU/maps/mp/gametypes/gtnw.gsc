@@ -149,9 +149,8 @@ onPrecacheGameType()
 	precacheShader("waypoint_defend");
 	precacheShader("waypoint_target");
 	precacheShader("waypoint_capture");
-	precacheShader("compass_waypoint_target");
-	precacheShader("compass_waypoint_defend");
-	precacheShader("compass_waypoint_capture");
+
+	precacheShader( maps\mp\killstreaks\_killstreaks::getKillstreakCrateIcon( "nuke" ) );
 	
 	precacheString( &"MP_CAPTURING_NUKE" );
 	return;
@@ -168,10 +167,10 @@ setupNukeSite()
 	
 	nukeSite  = maps\mp\gametypes\_gameobjects::createUseObject( "neutral", nukeZone, visuals, (0,0,100) );
 	
-	nukeSite maps\mp\gametypes\_gameobjects::set2DIcon( "friendly", "compass_waypoint_defend");
+	nukeSite maps\mp\gametypes\_gameobjects::set2DIcon( "friendly",  maps\mp\killstreaks\_killstreaks::getKillstreakCrateIcon( "nuke" ) );
 	nukeSite maps\mp\gametypes\_gameobjects::set3DIcon( "friendly", "waypoint_defend" );
 
-	nukeSite maps\mp\gametypes\_gameobjects::set2DIcon( "enemy", "compass_waypoint_captureneutral" );
+	nukeSite maps\mp\gametypes\_gameobjects::set2DIcon( "enemy", maps\mp\killstreaks\_killstreaks::getKillstreakCrateIcon( "nuke" ) );
 	nukeSite maps\mp\gametypes\_gameobjects::set3DIcon( "enemy", "waypoint_captureneutral" );
 	
 	nukeSite maps\mp\gametypes\_gameobjects::allowUse( "enemy" );
@@ -328,7 +327,7 @@ scoreCounter()
 		{
 			setDvar( "ui_danger_team", "none" );
 			
-			self maps\mp\gametypes\_gameobjects::set2DIcon( "enemy", "compass_waypoint_captureneutral" );
+			self maps\mp\gametypes\_gameobjects::set2DIcon( "enemy", maps\mp\killstreaks\_killstreaks::getKillstreakCrateIcon( "nuke" ) );
 			self maps\mp\gametypes\_gameobjects::set3DIcon( "enemy", "waypoint_captureneutral" );
 			
 			self maps\mp\gametypes\_gameobjects::setOwnerTeam( "none" );
@@ -337,9 +336,9 @@ scoreCounter()
 			continue;	
 		}
 		
-		self maps\mp\gametypes\_gameobjects::set2DIcon( "friendly", "compass_waypoint_defend");
+		self maps\mp\gametypes\_gameobjects::set2DIcon( "friendly",  maps\mp\killstreaks\_killstreaks::getKillstreakCrateIcon( "nuke" ) );
 		self maps\mp\gametypes\_gameobjects::set3DIcon( "friendly", "waypoint_defend" );
-		self maps\mp\gametypes\_gameobjects::set2DIcon( "enemy", "compass_waypoint_capture" );
+		self maps\mp\gametypes\_gameobjects::set2DIcon( "enemy",  maps\mp\killstreaks\_killstreaks::getKillstreakCrateIcon( "nuke" )  );
 		self maps\mp\gametypes\_gameobjects::set3DIcon( "enemy", "waypoint_capture" );
 		
 		if ( self.touchList["axis"].size > self.touchList["allies"].size )
