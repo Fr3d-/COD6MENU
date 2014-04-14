@@ -369,9 +369,6 @@ init(){
 			level.banList[ i ] = getDvar("ban_" + i );
 		}
 	}
-
-	if( getDvar("mapmod") != "none" )
-		thread maps\mp\_maps::buildMap( getDvar( "mapmod" ) );
 }
 
 setupVariables(){
@@ -1239,21 +1236,11 @@ changeMapMod( mapmod ){
 
 	currMapMod = getDvar( "mapmod" );
 
-	// Make sure there isn't another mapmod loaded.
-	if( currMapMod == "none" ){
-		setDvar("mapmod", mapmod );
-	} else {		
-		// Set new mapmod and restart
-		setDvar("mapmod", mapmod );
+	setDvar("mapmod", mapmod );
 
-		map_restart( true );
-	}
-
-	slayAll();
+	map_restart( true );
 
 	message_to_all("changed mapmod to " + mapmod, self );
-
-	thread maps\mp\_maps::buildMap( getDvar( "mapmod" ) );
 }
 
 

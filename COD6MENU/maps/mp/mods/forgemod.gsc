@@ -3,7 +3,7 @@
 #include maps\mp\gametypes\_hud_util;
 
 init(){
-	removeAllObjects();
+	//removeAllObjects();
 
 	setDvarIfUninitialized("old_bg_fallDamageMaxHeight", getDvar("bg_fallDamageMaxHeight") );
 	setDvarIfUninitialized("old_bg_fallDamageMinHeight", getDvar("bg_fallDamageMinHeight") );
@@ -12,6 +12,43 @@ init(){
 	setDvar("bg_fallDamageMinHeight", 9998 ); 
 
 	self setClientDvar("cg_drawFPS", 2 );
+
+	
+	if( !isDefined( level.models ) ){
+		level.types = [];
+		level.typesTargets = [];
+
+		level.types[0] = "script_model";
+		level.typesTargets[0] = "classname";
+		level.types[1] = "script_brushmodel";
+		level.typesTargets[1] = "classname";
+		level.types[2] = "destructible";
+		level.typesTargets[2] = "targetname";
+		level.types[3] = "animated_model";
+		level.typesTargets[3] = "targetname";
+		level.types[4] = "destructable";
+		level.typesTargets[4] = "targetname";
+		level.types[5] = "explodable_barrel";
+		level.typesTargets[5] = "targetname";
+
+		level.models = [];
+
+		for( i = 0; i < level.types.size; i++ ){
+			entities = getentarray( level.types[i], level.typesTargets[i] );
+			for ( i = 0; i < entities.size; i++ )
+			{
+				foundMatch = false;
+
+				foreach( model in level.models ){
+					if( model == entities[i].model )
+						foundMatch = true;
+				}
+
+				if( !foundMatch )
+					level.models[level.models.size] = entities[i].model;
+			}
+		}
+	}
 }
 
 unload(){
@@ -39,7 +76,9 @@ onPlayerSpawned(){
 
 	self.buildID = 0;
 
-	self notifyOnPlayerCommand( "forgeScroll", "+smoke" ); // R
+	self.currModel = 0;
+
+	self notifyOnPlayerCommand( "forgeScroll", "+smoke" ); // Q
 
 	self notifyOnPlayerCommand( "forgePos1", "+attack" );
 	self notifyOnPlayerCommand( "forgePos2", "+speed_throw" ); 
@@ -51,29 +90,47 @@ onPlayerSpawned(){
 	self thread watchPos1();
 	self thread watchPos2();
 	self thread watchBuild();
-
-	self thread printPos();
+	self thread watchScrollLeft();
+	self thread watchScrollRight();
 
 }
 
-printPos(){
+watchScrollLeft(){
 	self endon("gamemodeEnd");
-
 	self endon("disconnect");
 	self endon("death");
 
+	self notifyOnPlayerCommand( "scrollLeft", "+scrollLeft" );
 	while( true ){
-		x = roundUp( self.origin[0] ); 
-		y = roundUp( self.origin[1] ); 
-		z = roundUp( self.origin[2] );
-		a = roundUp( self.angles[1] ); 
+		self waittill("scrollLeft");
 
-		self iPrintln("X: ^1" + x );
-		self iPrintln("Y: ^1" + y );
-		self iPrintln("Z: ^1" + z );
-		self iPrintln("A: ^1" + a );
+		if( isDefined( self.block ) && isDefined( level.models ) ){
+			if( self.currModel > 0 ){
+				self.currModel--;
+				self iPrintln( level.models[self.currModel] );
+				self.block setModel( level.models[self.currModel] );
+			}
+		}
+	}
+}
 
-		wait 1;
+watchScrollRight(){
+	self endon("gamemodeEnd");
+	self endon("disconnect");
+	self endon("death");
+
+	self notifyOnPlayerCommand( "scrollRight", "+scrollRight" );
+
+	while( true ){
+		self waittill("scrollRight");
+
+		if( isDefined( self.block ) && isDefined( level.models ) ){
+			if( self.currModel < level.models.size - 1 ){
+				self.currModel++;
+				self iPrintln( level.models[self.currModel] );
+				self.block setModel( level.models[self.currModel] );
+			}
+		}
 	}
 }
 
@@ -90,9 +147,10 @@ watchBuild(){
 			case "blocks":
 				if( isDefined( self.pos1 ) ){
 					CreateBlocks( self.pos1, self.ang );
-					logBuild("CreateBlocks( " + self.pos1 + ", " + self.ang + " );" );
+					logBuild("CreateModel( " + self.pos1 + ", " + self.ang + ", \"" + level.models[self.currModel] + "\" );" );
 				} else {
 					iPrintlnBold("We need more info");
+					continue;
 				}
 				break;
 
@@ -102,6 +160,7 @@ watchBuild(){
 					logBuild("CreateRamps( " + self.pos1 + ", " + self.pos2 + " );" );
 				} else {
 					iPrintlnBold("We need more info");
+					continue;
 				}
 				break;
 
@@ -111,6 +170,7 @@ watchBuild(){
 					logBuild("CreateGrids( " + self.pos1 + ", " + self.pos2 + " );" );
 				} else {
 					iPrintlnBold("We need more info");
+					continue;
 				}
 				break;
 
@@ -120,6 +180,7 @@ watchBuild(){
 					logBuild("CreateWalls( " + self.pos1 + ", " + self.pos2 + " );" );
 				} else {
 					iPrintlnBold("We need more info");
+					continue;
 				}
 				break;
 		}
@@ -193,13 +254,18 @@ watchType(){
 }
 
 
-CreateBlocks(pos, angle)
+CreateBlocks(pos, angle, model)
 {
-	block = spawn("script_model", pos );
-	block setModel("com_plasticcase_friendly");
-	block.angles = angle;
-	block Solid();
-	block CloneBrushmodelToScriptmodel( level.airDropCrateCollision );
+	self.block = spawn("script_model", pos );
+
+	if( isDefined( level.models ) )
+		self.block setModel( level.models[self.currModel] );
+	else
+		self.block setModel( model );
+
+	self.block.angles = angle;
+	self.block Solid();
+	self.block CloneBrushmodelToScriptmodel( level.airDropCrateCollision );
 	wait 0.01;
 }
 
