@@ -582,8 +582,10 @@ PlayerKilled_internal( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWe
 	
 	//prof_begin( " PlayerKilled_3_drop" );
 	// drop weapons from killed player
-	victim maps\mp\gametypes\_weapons::dropScavengerForDeath( attacker );	// must be done before dropWeaponForDeath, since we use some weapon information
-	victim maps\mp\gametypes\_weapons::dropWeaponForDeath( attacker );
+	if( getDvar("mod") != "oneinthechamber"){
+		victim maps\mp\gametypes\_weapons::dropScavengerForDeath( attacker );	// must be done before dropWeaponForDeath, since we use some weapon information
+		victim maps\mp\gametypes\_weapons::dropWeaponForDeath( attacker );
+	}
 	//prof_end( " PlayerKilled_3_drop" );
 	
 	if ( !isFauxDeath )
