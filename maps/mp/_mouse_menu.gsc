@@ -327,9 +327,6 @@ init(){
 	// How many kills for a victory in the mods?
 	level.killsForVictory = 30;
 
-	// Disable killstreaks
-	level.killstreakRewards = 0;
-
 	if( getDvar("mod") == "" ){
 		setDvarIfUninitialized("mod", "none");
 	}
@@ -337,6 +334,11 @@ init(){
 	if( getDvar( "mapmod" ) == "" )
 		setDvarIfUninitialized("mapmod", "none");
 
+	if(getDvar("mod") == "none"){
+		level.killstreakRewards = 1;
+	} else {
+		level.killstreakRewards = 0;
+	}
 	// Enable logging
 	//if( getDvarInt("logfile") != 2 )
 	//	setDvar("logfile", 2 );
