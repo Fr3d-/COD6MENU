@@ -102,8 +102,6 @@ displayMOTD(){
 			self.motd setText( 
 				CONST_RED + "LOBBY RULES" + "\n" + 
 				CONST_RED + "- " + CONST_WHITE + "no cheating!" + "\n" +
-				CONST_RED + "- " + CONST_WHITE + "no noobtubing!" + "\n" + 
-				CONST_RED + "- " + CONST_WHITE + "no akimbo g18!" + "\n" +
 				CONST_RED + "- " + CONST_WHITE + "no begging!" + "\n" +
 				"\n" +
 				CONST_RED + "Current gamemode: "	+ CONST_WHITE + "\n" + gamemodeName( getDvar("g_gametype") ) + "\n" +
