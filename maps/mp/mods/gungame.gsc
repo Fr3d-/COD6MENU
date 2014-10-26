@@ -165,6 +165,7 @@ onPlayerKilled( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapon, v
 		if( defined( attacker ) ){
 			if( isPlayer( attacker ) && attacker.guid != victim.guid ){
 				promotePlayer( attacker );
+				attacker playLocalSound("mp_killstreak_emp");
 			} else {
 				demotePlayer( victim );
 			}
