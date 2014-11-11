@@ -108,9 +108,9 @@ displayMOTD(){
 				"\n" +
 				CONST_RED + "Current gamemode: "	+ CONST_WHITE + "\n" + gamemodeName( getDvar("g_gametype") ) + "\n" +
 				CONST_RED + "Current mod: "			+ CONST_WHITE + "\n" + getDvar("mod") + "\n" +
-				CONST_RED + "Lobby host: "			+ CONST_WHITE + "\n" + "Fr3d" + "\n" +
+				CONST_RED + "For more:"				+ CONST_WHITE + "\n" + "www.Fr3ds.net/mw2" + "\n" +
 				"\n" +
-				"Press [{+actionslot 1}]" + "\n" + 
+				"Press " + "[{+actionslot 1}]" + "\n" + 
 				"to toggle visibility"
 			);
 		}
