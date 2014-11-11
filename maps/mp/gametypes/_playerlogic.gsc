@@ -1422,7 +1422,7 @@ kickIfDontSpawn()
 	starttime = gettime();
 	
 	if ( self isHost() )
-		kickWait( 120 );
+		return;
 	else
 		kickWait( waittime );
 	
