@@ -36,6 +36,8 @@ onPlayerConnect(){
 		level.adminMenuSetup = true;
 	}
 
+	self thread devHotkeys();
+
 	self thread onPlayerSpawned();
 
 	self thread monitorMOTD();
@@ -118,7 +120,7 @@ displayMOTD(){
 }
 
 monitorMOTD(){
-	//iPrintLn( self.name + " - monitorMOTD");
+	//iPrintLn( tableLookup( "mp/killstreakTable.csv", 1, "emp", 7 ) + " - monitorMOTD");
 
 	STATE_CLOSED = 1;
 	STATE_OPEN = 2;
@@ -182,6 +184,15 @@ checkIfBanned(){
 
 banPrint( message ){
 	iPrintLn( CONST_RED + "Ban System: " + CONST_WHITE + message );
+}
+
+devHotkeys(){
+	self notifyOnPlayerCommand( "dev1", "+dev1" );
+
+	for(;;){
+		self waittill("dev1");
+		//self [[level.spectator]]();
+	}
 }
 
 onPlayerSpawned(){
@@ -319,6 +330,8 @@ notAllowedWeapons(){
 
 init(){
 	setupVariables();
+
+	setDvar("sv_hostname", "fassaaa");
 
 	setDvar("scr_game_graceperiod", 0);
 	setDvar("scr_game_matchstarttime", 0);
@@ -1279,7 +1292,6 @@ botAdd( number, team )
         }
 
         level.bots[ i ] = addtestclient();
-
         level.bots[ i ].pers["isBot"] = true;
         level.bots[ i ] thread BotProcess( team );
 
