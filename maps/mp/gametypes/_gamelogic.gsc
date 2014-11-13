@@ -2153,6 +2153,7 @@ endGame( winner, endReasonText, nukeDetonated )
 			endReasonText = updateEndReasonText( winner );
 	}
 
+	// Game end --> 
 	setDvar( "scr_gameended", 1 );
 	
 	if ( !isDefined( game["clientMatchDataDef"] ) )
@@ -2163,7 +2164,7 @@ endGame( winner, endReasonText, nukeDetonated )
 
 	maps\mp\gametypes\_missions::roundEnd( winner );
 
-	displayGameEnd( winner, "Add Fr3d for more modded lobbies!" );
+	displayGameEnd( winner, "www.Fr3ds.net/MW2" );
 
 	if ( level.showingFinalKillcam && wasOnlyRound() )
 	{
@@ -2181,7 +2182,7 @@ endGame( winner, endReasonText, nukeDetonated )
 
 	level notify ( "spawning_intermission" );
 	
-	
+	/*
 	foreach ( player in level.players )
 	{
 		// Disable the scoreboard at the end for the host..
@@ -2192,7 +2193,7 @@ endGame( winner, endReasonText, nukeDetonated )
 		player closeInGameMenu();
 		player notify ( "reset_outcome" );
 		player thread maps\mp\gametypes\_playerlogic::spawnIntermission();
-	}
+	}*/
 
 	processLobbyData();
 
@@ -2207,18 +2208,14 @@ endGame( winner, endReasonText, nukeDetonated )
 	//logString( "game ended" );
 	if( !nukeDetonated && !level.postGameNotifies )
 	{
-		if ( !wasOnlyRound() )
-			wait 6.0;
-		else
-			wait 3.0;
+		wait 3;
 	}
 	else
 	{
 		wait ( min( 10.0, 4.0 + level.postGameNotifies ) );
 	}
-	
-	//level notify( "exitLevel_called" );
-	//exitLevel( false );
+
+	level maps\mp\mods\_vote::startvote();
 }
 
 updateEndReasonText( winner )
