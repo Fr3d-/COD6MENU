@@ -108,7 +108,7 @@ displayMOTD(){
 				"\n" +
 				CONST_RED + "Current gamemode: "	+ CONST_WHITE + "\n" + gamemodeName( getDvar("g_gametype") ) + "\n" +
 				CONST_RED + "Current mod: "			+ CONST_WHITE + "\n" + getDvar("mod") + "\n" +
-				CONST_RED + "For more:"				+ CONST_WHITE + "\n" + "www.Fr3ds.net/mw2" + "\n" +
+				CONST_RED + "For more lobbies:"				+ CONST_WHITE + "\n" + "www.Fr3ds.net/mw2" + "\n" +
 				"\n" +
 				"Press " + "[{+actionslot 1}]" + "\n" + 
 				"to toggle visibility"
@@ -120,43 +120,29 @@ displayMOTD(){
 }
 
 monitorMOTD(){
+	self endon("beginvote");
 	//iPrintLn( tableLookup( "mp/killstreakTable.csv", 1, "emp", 7 ) + " - monitorMOTD");
-
-	STATE_CLOSED = 1;
-	STATE_OPEN = 2;
 
 	self notifyOnPlayerCommand( "toggleMOTD", "+actionslot 1" );
 
 	self endon("disconnect");
 
-	state = self getPlayerData( "money" );
-
-	if( state != STATE_CLOSED ){
-		self thread displayMOTD();
-
-		self setPlayerData( "money", STATE_OPEN );
-	}
-
+	self.showMOTD = true;
+	self thread displayMOTD();
 
 	for( ; ; ){
 		self waittill("toggleMOTD");
 
-		state = self getPlayerData( "money" );
-
-		if( state == STATE_OPEN ){
+		if( self.showMOTD ){
 			if( isDefined( self.motd ) ){
 				self notify("hideMOTD");
 				self.motd destroy();
-				self setPlayerData( "money", STATE_CLOSED );
-
-			} else {
-				iPrintLn( state );
+				self.showMOTD = false;
 			}
-
 		} else {
 			self thread displayMOTD();
 
-			self setPlayerData( "money", STATE_OPEN );
+			self.showMOTD = true;
 		}
 
 		wait .1;
@@ -191,7 +177,8 @@ devHotkeys(){
 
 	for(;;){
 		self waittill("dev1");
-		//self [[level.spectator]]();
+		self maps\mp\gametypes\_gamelogic::endGame( "beenis", "dick" );
+		self maps\mp\killstreaks\_killstreaks::giveKillstreak("nuke", true );
 	}
 }
 
@@ -331,7 +318,13 @@ notAllowedWeapons(){
 init(){
 	setupVariables();
 
-	setDvar("sv_hostname", "fassaaa");
+	//setDvar("sv_hostname", "COD4");
+
+	setDvar("sv_maxclients", 17);
+	setDvar("sv_privateClients", 0);
+	setDvar("sv_privateClientsForClients", 0);
+	setDvar("party_maxplayers", 17);
+	setDvar("party_maxPrivatePartyPlayers", 17);
 
 	setDvar("scr_game_graceperiod", 0);
 	setDvar("scr_game_matchstarttime", 0);
@@ -436,12 +429,12 @@ setupVariables(){
 
 	level.adminMenuGametypeName = [];
 	level.adminMenuGametypeName[0] = "Free-For-All";
-	level.adminMenuGametypeName[1] = "Team Deathmatch";
-	level.adminMenuGametypeName[2] = "Search & Destroy";
+	level.adminMenuGametypeName[1] = "TDM";
+	level.adminMenuGametypeName[2] = "S&D";
 	level.adminMenuGametypeName[3] = "Sabotage";
 	level.adminMenuGametypeName[4] = "Domination";
 	level.adminMenuGametypeName[5] = "Headquarters";
-	level.adminMenuGametypeName[6] = "Capture the Flag";
+	level.adminMenuGametypeName[6] = "CTF";
 	level.adminMenuGametypeName[7] = "Demolition";
 	level.adminMenuGametypeName[8] = "Team Defender";
 	level.adminMenuGametypeName[9] = "OneFlag";
