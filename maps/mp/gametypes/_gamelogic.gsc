@@ -2208,7 +2208,7 @@ endGame( winner, endReasonText, nukeDetonated )
 	//logString( "game ended" );
 	if( !nukeDetonated && !level.postGameNotifies )
 	{
-		wait 3;
+		//wait 3;
 	}
 	else
 	{
