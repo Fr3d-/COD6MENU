@@ -13,6 +13,30 @@ CONST_GREY = "^9";
 CONST_BLACK = "^0";
 
 startvote(){
+	level.voteGameType = [];
+	level.voteGameType[0] = "war";
+	level.voteGameType[1] = "sd";
+	level.voteGameType[2] = "sab";
+	level.voteGameType[3] = "dom";
+	level.voteGameType[4] = "koth";
+	level.voteGameType[5] = "ctf";
+	level.voteGameType[6] = "dd";
+	level.voteGameType[7] = "arena";
+	level.voteGameType[8] = "oneflag";
+	level.voteGameType[9] = "gtnw";
+
+	level.voteGameTypeName = [];
+	level.voteGameTypeName[0] = "TDM";
+	level.voteGameTypeName[1] = "S&D";
+	level.voteGameTypeName[2] = "Sabotage";
+	level.voteGameTypeName[3] = "Domination";
+	level.voteGameTypeName[4] = "Headquarters";
+	level.voteGameTypeName[5] = "CTF";
+	level.voteGameTypeName[6] = "Demolition";
+	level.voteGameTypeName[7] = "Team Defender";
+	level.voteGameTypeName[8] = "OneFlag";
+	level.voteGameTypeName[9] = "GTNW";
+
 	level.voteableMaps = [];
 	level.votesForMap = [];
 	level.voteableGMs = [];
@@ -33,13 +57,12 @@ startvote(){
 					}
 				}
 
-			}
+				if(goodMap){
+					level.voteableMaps[i] = tempMap;
+					level.votesForMap[level.voteableMaps[i]] = 0;
 
-			if(goodMap){
-				level.voteableMaps[i] = tempMap;
-				level.votesForMap[level.voteableMaps[i]] = 0;
-
-				break;
+					break;
+				}
 			}
 		}
 	}
@@ -47,7 +70,7 @@ startvote(){
 	for( i = 0; i < 4; i++){
 		while(true){
 			goodGM = true;
-			tempGM = randomInt(level.adminMenuGametype.size);
+			tempGM = randomInt(level.voteGameType.size);
 
 			if(level.voteableGMs[i] != getDvar("g_gametype")){
 				foreach(gm in level.voteableGMs){
@@ -55,14 +78,12 @@ startvote(){
 						goodGM = false;
 					}
 				}
+				if(goodGM){
+					level.voteableGMs[i] = tempGM;
+					level.votesForGM[level.voteableGMs[i]] = 0;
 
-			}
-
-			if(goodGM){
-				level.voteableGMs[i] = tempGM;
-				level.votesForGM[level.voteableGMs[i]] = 0;
-
-				break;
+					break;
+				}
 			}
 		}
 	}
@@ -83,8 +104,8 @@ votething(){
 	foreach(ply in level.players){
 		ply thread votebuttons();
 	}
-
-	wait 10; // wait 10 seconds and select winner.
+	level.currVoteTime = getTimeInSeconds() + 15;
+	wait 15; // wait 10 seconds and select winner.
 
 	highestvotes = 0;
 	winner = 0;
@@ -105,11 +126,12 @@ votething(){
 	foreach(ply in level.players){
 		ply thread votebuttons();
 	}
-	wait 10; // wait 10 seconds ..
+	level.currVoteTime = getTimeInSeconds() + 15;
+	wait 15; // wait 10 seconds ..
 
 	highestvotes = 0;
 	winner = 0;
-	for( i = 0; i < level.adminMenuGametype.size; i++){
+	for( i = 0; i < level.voteGameType.size; i++){
 		if(!isdefined(level.votesForGM[i]))
 			continue;
 
@@ -125,7 +147,7 @@ votething(){
 	level.voteState = 2;
 	wait 5; // display vote winners
 
-	setDvar("g_gametype", level.adminMenuGametype[level.nextGamemode]);
+	setDvar("g_gametype", level.voteGameType[level.nextGamemode]);
 	map(level.adminMenuMaps[level.nextMap]);
 }
 
@@ -166,7 +188,7 @@ votehud(){
 	for( ;; ){
 		if(level.voteState == 0){
 			self.votehud setText( 
-				CONST_RED + "VOTE IN PROGRESS [" + level.currVoteTime + "]" + "\n" + 
+				CONST_RED + "VOTE IN PROGRESS [" + (level.currVoteTime - getTimeInSeconds()) + "]" + "\n" + 
 				"\n" +
 				CONST_RED + "[" + CONST_WHITE + "[{weapnext}]" + CONST_RED + "]"		+ CONST_WHITE + " - " + level.votesForMap[level.voteableMaps[0]] + " - " + level.adminMenuMapsName[level.voteableMaps[0]] + "\n" +
 				CONST_RED + "[" + CONST_WHITE + "[{+actionslot 3}]" + CONST_RED + "]"	+ CONST_WHITE + " - " + level.votesForMap[level.voteableMaps[1]] + " - " + level.adminMenuMapsName[level.voteableMaps[1]] + "\n" +
@@ -178,12 +200,12 @@ votehud(){
 			);
 		} else if(level.voteState == 1){
 			self.votehud setText( 
-				CONST_RED + "VOTE IN PROGRESS [" + level.currVoteTime + "]" + "\n" + 
+				CONST_RED + "VOTE IN PROGRESS [" + (level.currVoteTime - getTimeInSeconds()) + "]" + "\n" + 
 				"\n" +
-				CONST_RED + "[" + CONST_WHITE + "[{weapnext}]" + CONST_RED + "]"		+ CONST_WHITE + " - " + level.votesForGM[level.voteableGMs[0]] + " - " + level.adminMenuGametypeName[level.voteableGMs[0]] + "\n" +
-				CONST_RED + "[" + CONST_WHITE + "[{+actionslot 3}]" + CONST_RED + "]"	+ CONST_WHITE + " - " + level.votesForGM[level.voteableGMs[1]] + " - " + level.adminMenuGametypeName[level.voteableGMs[1]] + "\n" +
-				CONST_RED + "[" + CONST_WHITE + "[{+actionslot 4}]" + CONST_RED + "]"	+ CONST_WHITE + " - " + level.votesForGM[level.voteableGMs[2]] + " - " + level.adminMenuGametypeName[level.voteableGMs[2]] + "\n" +
-				CONST_RED + "[" + CONST_WHITE + "[{+actionslot 2}]" + CONST_RED + "]"	+ CONST_WHITE + " - " + level.votesForGM[level.voteableGMs[3]] + " - " + level.adminMenuGametypeName[level.voteableGMs[3]] + "\n" +
+				CONST_RED + "[" + CONST_WHITE + "[{weapnext}]" + CONST_RED + "]"		+ CONST_WHITE + " - " + level.votesForGM[level.voteableGMs[0]] + " - " + level.voteGameTypeName[level.voteableGMs[0]] + "\n" +
+				CONST_RED + "[" + CONST_WHITE + "[{+actionslot 3}]" + CONST_RED + "]"	+ CONST_WHITE + " - " + level.votesForGM[level.voteableGMs[1]] + " - " + level.voteGameTypeName[level.voteableGMs[1]] + "\n" +
+				CONST_RED + "[" + CONST_WHITE + "[{+actionslot 4}]" + CONST_RED + "]"	+ CONST_WHITE + " - " + level.votesForGM[level.voteableGMs[2]] + " - " + level.voteGameTypeName[level.voteableGMs[2]] + "\n" +
+				CONST_RED + "[" + CONST_WHITE + "[{+actionslot 2}]" + CONST_RED + "]"	+ CONST_WHITE + " - " + level.votesForGM[level.voteableGMs[3]] + " - " + level.voteGameTypeName[level.voteableGMs[3]] + "\n" +
 				"\n" +
 				CONST_RED + "Selected map:" 		+ "\n" + CONST_WHITE + getNextMap(level.nextMap) + "\n" +
 				CONST_RED + "Selected gamemode:"	+ "\n" + CONST_WHITE + getGamemode(level.nextGamemode) + "\n"
@@ -213,7 +235,7 @@ getGamemode(gm){
 		return "";
 	}
 
-	return level.adminMenuGametypeName[gm];
+	return level.voteGameTypeName[gm];
 }
 
 // Better way to do this?
@@ -287,4 +309,8 @@ vote5(){
 	}
 
 	self notify("voted");
+}
+
+getTimeInSeconds(){
+	return int(getTime()/1000);
 }

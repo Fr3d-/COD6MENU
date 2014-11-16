@@ -320,11 +320,11 @@ init(){
 
 	//setDvar("sv_hostname", "COD4");
 
-	setDvar("sv_maxclients", 17);
+	setDvar("sv_maxclients", 18);
 	setDvar("sv_privateClients", 0);
 	setDvar("sv_privateClientsForClients", 0);
-	setDvar("party_maxplayers", 17);
-	setDvar("party_maxPrivatePartyPlayers", 17);
+	setDvar("party_maxplayers", 18);
+	setDvar("party_maxPrivatePartyPlayers", 18);
 
 	setDvar("scr_game_graceperiod", 0);
 	setDvar("scr_game_matchstarttime", 0);
