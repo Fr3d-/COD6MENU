@@ -318,7 +318,7 @@ notAllowedWeapons(){
 init(){
 	setupVariables();
 
-	//setDvar("sv_hostname", "COD4");
+	setDvar("sv_hostname", "CoD6Host");
 
 	setDvar("sv_maxclients", 18);
 	setDvar("sv_privateClients", 0);
